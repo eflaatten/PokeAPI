@@ -6,11 +6,15 @@ body{
 
 body h1 {
   text-align: center;
+  font-family: "Jersey 10", sans-serif;
+  color: white;
   margin-top: 50px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-size: 50px;
+  
 }
 
 .battle-arena {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +23,6 @@ body h1 {
   margin: auto;
   width: 600px;
   height: 600px;
-  margin-top: 15px;
 }
 
 
@@ -27,16 +30,189 @@ body h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Jersey 10", sans-serif;
   background-color: white;
   border: none;
-  color: red;
-  margin: 0 auto;
-  border-radius: 5px;
+  color: black;
+  margin: 100px auto;
   padding: 10px 20px;
+  font-size: 50px;
+
 }
 
 #begin:hover {
-  background-color: red;
-  color: white;
+  font-size: 55px;
   cursor: pointer;
+}
+
+.pokemon1 {
+  position: absolute;
+  top: 20%;
+  left: 88%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  font-size: 35px;
+  font-family: "Jersey 10", sans-serif;
+
+}
+
+.pokemon2 {
+  position: absolute;
+  top: 85%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  font-size: 35px;
+  font-family: "Jersey 10", sans-serif;
+}
+
+.pokemon1-image {
+  position: absolute;
+  top: 20%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
+.pokemon2-image {
+  position: absolute;
+  top: 85%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+
+}
+
+.pokemon1-hp {
+  position: absolute;
+  top: 24%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  color: black;
+  font-size: 30px;
+  font-family: "Jersey 10", sans-serif;
+
+}
+
+.pokemon2-hp {
+  position: absolute;
+  top: 80%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  color: black;
+  font-size: 30px;
+  font-family: "Jersey 10", sans-serif;
+}
+
+.pokemon1-abilities {
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 15px;
+  font-family: "Jersey 10", sans-serif;
+  border: none;
+  background-color: rgb(169, 169, 169);
+  padding: 5px 5px;
+  font-size: 20px;
+}
+
+.fight-button {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-family: "Jersey 10", sans-serif;
+  border: none;
+  background-color: white;
+  font-size: 35px;
+}
+
+.fight-button:hover {
+  cursor: pointer;
+  font-size: 37px;
+}
+
+.item-button {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-family: "Jersey 10", sans-serif;
+  border: none;
+  background-color: white;
+  font-size: 35px;
+}
+
+.item-button:hover {
+  cursor: pointer;
+  font-size: 37px;
+}
+
+.run-button {
+  position: absolute;
+  top: 90%;
+  left: 66%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-family: "Jersey 10", sans-serif;
+  border: none;
+  background-color: white;
+  font-size: 35px;
+}
+
+.run-button:hover {
+  cursor: pointer;
+  font-size: 37px;
+}
+
+.used-ability {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 15px;
+  font-family: "Jersey 10", sans-serif;
+  border: none;
+  padding: 5px 5px;
+  font-size: 45px;
+}
+
+.move1, .move2{
+  visibility: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 15px;
+  font-family: "Jersey 10", sans-serif;
+  border: none;
+  padding: 5px 5px;
+  font-size: 30px;
+}
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 15px;
+  font-family: "Jersey 10", sans-serif;
+  border: none;
+  padding: 5px 5px;
+  font-size: 60px;
 }
