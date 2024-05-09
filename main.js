@@ -1,7 +1,5 @@
-
-
 // USE POKEAPI TO GET 2 POKEMON AND DISPLAY THEM ON THE SCREEN
-const getPokemon = async (id) => {
+const getPokemon = async () => {
   // hide start button when the game starts
   document.getElementById('begin').style.display = 'none';
 
@@ -16,19 +14,17 @@ const getPokemon = async (id) => {
     // get 2 random pokemon at a time
    
     const randomPokemon = data.results.sort(() => 0.5 - Math.random()).slice(0, 2);
-    let battleArena = document.querySelector('.battle-arena');
 
     // display the pokemon names, abilites and base experience
     const pokemon1 = await fetch(randomPokemon[0].url) // get the url of the first pokemon to get its info
     const pokemon2 = await fetch(randomPokemon[1].url) // get the url of the second pokemon to get its info
     const pokemon1Data = await pokemon1.json(); // get the data of the first pokemon and convert it to json
     const pokemon2Data = await pokemon2.json(); // get the data of the second pokemon and convert it to json
+
     const pokemon1Abilities = pokemon1Data.abilities.map(ability => ability.ability.name)
     const pokemon2Abilities = pokemon2Data.abilities.map(ability => ability.ability.name)
     let pokemon1HP = pokemon1Data.stats[0].base_stat;
     let pokemon2HP = pokemon2Data.stats[0].base_stat;
-    let pokemon1MaxHP = pokemon1HP;
-    let pokemon2MaxHP = pokemon2HP;
 
     const pokemonList = document.getElementById('pokemon-list')
     let pokemon1Element = document.createElement('div');
@@ -79,72 +75,194 @@ const getPokemon = async (id) => {
     runButton.innerHTML = 'RUN';
     pokemonList.appendChild(runButton);
 
-    // start new game
+    let startNewGame = document.createElement('button');
+    startNewGame.className = 'start-new-game';
+    startNewGame.innerHTML = 'NEW GAME';
+
+    // start a new game
+    startNewGame.addEventListener('click', () => {
+      window.location.reload();
+      fightButton.click()
+    })
+
+    // get a new set of pokemon
     runButton.addEventListener('click', () => {
       window.location.reload();
     })
 
     // fight the pokemon
-    let turn = 0
     fightButton.addEventListener('click', () => {
-      // Choose a random ability for the current pokemon
-      let randomAbility = turn % 2 === 0 
-      ? pokemon1Abilities[Math.floor(Math.random() * pokemon1Abilities.length)] 
-      : pokemon2Abilities[Math.floor(Math.random() * pokemon2Abilities.length)]
+      // Idle player animation
+      pokemon1Image.classList.add("idle-player");
+      // Idle foe animation
+      pokemon2Image.classList.add("idle-foe");
 
-      // Get the damage dealt
-      // ability damage - from pokemons health
-      const damage = Math.floor(Math.random() * 10) + 1
-
-      if(turn % 2 === 0){
-        // pokemon 1 attacks pokemon 2
-        pokemon2HP -= damage
-        // update the HP bar
-        if(pokemon2HP > 0){
-          let hpPercent = (pokemon2HP / pokemon2MaxHP) * 7
-          let blocks = "▄".repeat(hpPercent)
-          pokemon2HPBar.innerHTML = `HP: ${pokemon2HP}\n<span style="color: gold;">${blocks}</span>\n`;
-        } else {
-          pokemon2HPBar.innerHTML = ''
-        }
-
-        // Display the move
-        let move = document.createElement('div')
-        move.className = 'move1'
-        move.innerHTML = `${pokemon1Data.name} used ${randomAbility}`
-        pokemonList.appendChild(move)
-      } else {
-        // pokemon 2 attacks pokemon 1
-        pokemon1HP -= damage
-        // update the HP bar
-        if(pokemon1HP > 0){
-          let hpPercent = (pokemon1HP / pokemon1MaxHP) * 7
-          let blocks = "▄".repeat(hpPercent)
-          pokemon1HPBar.innerHTML = `HP: ${pokemon1HP}\n<span style="color: gold;">${blocks}</span>\n`;
-        } else {
-          pokemon1HPBar.innerHTML = ''
-        }
-
-        // Display the move
-        let move = document.createElement('div')
-        move.className = 'move2'
-        move.innerHTML = `${pokemon2Data.name} used ${randomAbility}`
-        pokemonList.appendChild(move)
+      // Choose a random ability for players pokemon
+      let randomAbility =
+        pokemon2Abilities[Math.floor(Math.random() * pokemon2Abilities.length)];
+      
+      
+      // Calc remaining HP
+      let remainingFoeHP = Math.max(Math.ceil(pokemon1HP / 10), 0)
+      // Calc damage
+      const playerDamage = Math.floor(Math.random() * 10);
+      // //Update HP
+      pokemon1HP = Math.max(pokemon1HP - playerDamage, 0);
+      //Remove blocks from HP bar based on damage and display it
+      let hpBlocks = ''
+      for (let i = 0; i < remainingFoeHP; i++) {
+        hpBlocks += '▄';
       }
 
-      turn++
+      // Display the HP bar
+      pokemon1HPBar.innerHTML = `HP: ${pokemon1HP}\n<span style="color: gold;">${hpBlocks}</span>\n`;
 
-      // check if the game is over
-      if(pokemon1HP === 0 || pokemon2HP === 0){
-        let gameOver = document.createElement('div');
-        gameOver.className = 'game-over';
-        gameOver.innerHTML = '${pokemon1HP <= 0 ? pokemon2Data.name : pokemon1Data.name} wins!';
-        pokemonList.appendChild(gameOver);
-      } 
+      let foeHasFainted = document.createElement('div');
+      foeHasFainted.className = 'foe-has-fainted';
+      foeHasFainted.innerHTML = `${pokemon1Data.name} has fainted`;
+
+      // Check if pokemon HP is 0
+      if(pokemon1HP <= 0){
+        pokemon1HPBar.innerHTML = `HP: 0\n<span style="color: gold;"></span>\n`;
+        setTimeout(() => {
+          pokemonList.appendChild(foeHasFainted);
+          pokemonList.appendChild(startNewGame);
+          pokemon1Image.classList.remove('idle-foe')
+          clearTimeout(foeAttack)
+
+        }, 1000);
+      }
+
+      // Display the move
+      let move1 = document.createElement("div");
+      move1.className = "move1";
+      move1.innerHTML = `${pokemon2Data.name} used ${randomAbility}`;
+      move1.style.visibility = "visible";
+
+      //Attack animation - player
+      // pokemon2Image.classList.add("attack-player");
+      pokemon1Image.classList.add("shake-foe");
+
+      pokemon2Image.addEventListener("animationend", () => {
+        // pokemon2Image.classList.remove("attack-player");
+        pokemon1Image.classList.remove("shake-foe");
+      });
+
+      setTimeout(() => {
+        pokemon1Image.classList.add("shake-foe");
+      }, 300);
+
+      pokemonList.appendChild(move1);
+      setTimeout(() => {
+        move1.style.visibility = "hidden";
+        pokemon1Image.classList.remove("shake-foe");
+        pokemon2Image.classList.remove("attack-player");
+      }, 1000);
+
+
+
+
+
+      // FOE ATTACK
+      let foeAttack = setTimeout(() => {
+        // get random ability for foe
+        let foeRandomAbility =
+          pokemon1Abilities[
+            Math.floor(Math.random() * pokemon1Abilities.length)
+          ];
+
+        // Display the move
+        let move2 = document.createElement("div");
+        move2.className = "move2";
+        move2.innerHTML = `foe ${pokemon1Data.name} used ${foeRandomAbility}`;
+        move2.style.visibility = "visible";
+
+        // Calc damage
+        const foeDamage = Math.floor(Math.random() * 10);
+        // //Update HP
+        pokemon2HP = Math.max(pokemon2HP - foeDamage, 0);
+        // Calc remaining HP of player
+        let remainingPlayerHP = Math.max(Math.ceil(pokemon2HP / 10), 0)
+        //Remove blocks from HP bar based on damage and display it
+        let playerHpBlocks = ''
+        for (let i = 0; i < remainingPlayerHP; i++) {
+          playerHpBlocks += "▄";
+        }
+        
+        // Display the HP bar
+        pokemon2HPBar.innerHTML = `HP: ${pokemon2HP}\n<span style="color: gold;">${playerHpBlocks}</span>\n`;
+
+
+        let playerHasFainted = document.createElement("div");
+        playerHasFainted.className = "player-has-fainted";
+        playerHasFainted.innerHTML = `${pokemon2Data.name} has fainted`;
+
+        // Check if pokemon HP is 0
+        if(pokemon2HP <= 0){
+          pokemon2HPBar.innerHTML = `HP: 0\n<span style="color: gold;"></span>\n`;
+          setTimeout(() => {
+            pokemonList.appendChild(playerHasFainted);
+            pokemonList.appendChild(startNewGame);
+          }, 1000);
+        }
+
+        // Attack animation - foe
+        pokemon1Image.addEventListener("animationend", () => {
+          pokemon1Image.classList.remove("attack-foe");
+          pokemon2Image.classList.remove("shake-player");
+        });
+
+        setTimeout(() => {
+          pokemon2Image.classList.add("shake-player");
+        }, 100);
+
+        pokemonList.appendChild(move2);
+        setTimeout(() => {
+          move2.style.visibility = "hidden";
+          pokemon2Image.classList.remove("shake-player");
+        }, 1000);
+
+      }, 3000);
     })
+
+
 
 
   } catch (error){ 
     console.log("error getting pokemon")
   }
 }
+
+
+//UNIT TESTING
+describe('getPokemon', () => {
+  it('should fetch 2 pokemon', async () => {
+    const fakeFetch = url => {
+      assert (
+        url === 'https://pokeapi.co/api/v2/pokemon/',
+      )
+      return new Promise(function(resolve){
+
+      })
+    }
+    getPokemon(fakeFetch)
+  })
+
+  it('parses the response of the fetch correctly', async () => {
+    const fakeFetch = () => {
+      return Promise.resolve({
+        json: () => Promise.resolve({
+          results: [
+            { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
+            { name: 'charmander', url: 'https://pokeapi.co/api/v2/pokemon/4/' }
+          ]
+        })
+      })
+    }
+    getPokemon(fakeFetch)
+    .then(result => {
+      assert(result === 'bulbasaur')
+      assert(result === 'charmander')
+    })
+  })
+})

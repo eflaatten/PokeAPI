@@ -21,3 +21,9 @@ Compare the two to see who is likely to win.
 3. Obtain an API key from [https://pokeapi.co/](https://pokeapi.co/).
 4. Run the application and enjoy the Pokemon battle!
 
+### INITIALIZING ###
+1. Run `npm i`  
+
+## Running Unit Tests ##
+
+`npm test main.js`
