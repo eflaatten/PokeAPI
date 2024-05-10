@@ -236,7 +236,7 @@ const getPokemon = async () => {
 
 //UNIT TESTING
 describe('getPokemon', () => {
-  it('should fetch 2 pokemon', async () => {
+  it('should make successful fetch request', async () => {
     const fakeFetch = url => {
       assert (
         url === 'https://pokeapi.co/api/v2/pokemon/',
