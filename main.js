@@ -261,8 +261,8 @@ describe('getPokemon', () => {
     }
     getPokemon(fakeFetch)
     .then(result => {
-      assert(result === 'bulbasaur')
-      assert(result === 'charmander')
+      assert(result.name[0] === 'bulbasaur')
+      assert(result.name[1] === 'charmander')
     })
   })
 })
