@@ -5,13 +5,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
-  <title>Pokémon Arena</title>
+  <link href="https://fonts.cdnfonts.com/css/pokemon-solid" rel="stylesheet">
+                
+  <title>PokéCenter</title>
   <link rel="stylesheet" href="../styles/style.css">
-  <link rel="stylesheet" href="../styles/animations.css">
 </head>
 <body>
-  
+  <div id="background-image"></div>
 
+  <div class="header">
+    <h1>Pokémon Arena</h1>
+  </div>
+
+  <div class="menus">
+    <div id="pokemon-list">
+      <p>Pokémon</p>
+      <select id="list-dropdown">
+        <option value="" disabled selected>Select a pokémon</option>
+      </select>
+    </div>
+  </div>
+
+  
+  <script type="module" src="../index.js"></script>
 </body>
-<script src="../src/pageFunc/index.js"></script>
-</html>
